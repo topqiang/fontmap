@@ -130,3 +130,15 @@
 .index-sel image:first-child{
   margin-left:0;
 }
+.dismiss{
+  display: flex;
+}
+.flex1{
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: no-warp;
+}
+.ritext{
+  float:right;font-size:24rpx
+}

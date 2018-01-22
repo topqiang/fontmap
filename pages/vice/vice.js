@@ -47,7 +47,6 @@ recorderManager.onStop((res) => {
 })
 
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -102,7 +101,7 @@ Page({
     //回调延迟 ，有时为空
     var intval = setInterval(function(){
       var uid = app.d.userId;      
-      if(uid && uid!="" && uid>0){
+      if (uid != undefined && uid !="" && uid>0){
         clearInterval(intval);
         that.loadindex(uid);
       }
@@ -110,7 +109,9 @@ Page({
   },
   onShow:function(){
     var uid = app.d.userId; 
-    this.loadindex(uid);
+    if (uid != undefined && uid != "" && uid > 0) {
+      this.loadindex(uid);
+    }
   },
   //加载热门搜索和历史记录
   loadindex: function (uid){

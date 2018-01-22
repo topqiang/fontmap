@@ -5,7 +5,10 @@
     <input class='' placeholder='查地点、公交站、公共设施' bindinput='callinput' bindblur='' bindfocus='inputfocus' confirm-type='search' bindconfirm="keyconfirm" value="{{val}}"></input>
     <text bindtap="clear">清除</text>
     <scroll-view class="context" wx:if="{{showcontext}}" scroll-y="true">
-      <view wx:for="{{keywos}}" wx:for-index="ind" wx:for-item="obj" bindtap='getData' data-index="{{ind}}" class="{{(index0===ind) ? 'on' : ''}}">{{obj.address}}[{{obj.title}}] </view>
+      <view class="dismiss" wx:for="{{keywos}}" wx:key="this" wx:for-index="ind" wx:for-item="obj" bindtap='getData' data-index="{{ind}}" class="{{(index0===ind) ? 'on' : ''}}">
+        <text class="ritext">{{obj._distance}}米</text>
+        <view class="flex1">{{obj.address}}[{{obj.title}}]</view>
+      </view>
     </scroll-view>
   </view>
   <view class="ovhid index-sel">
