@@ -2,7 +2,7 @@
   <view class="textval" hidden='{{show}}'>{{textval}}</view>
   <view class='areainput'>
     <image src='../../img/search.png'></image>
-    <input class='' placeholder='查地点、公交站、公共设施' bindinput='callinput' bindblur='' bindfocus='inputfocus' confirm-type='search' bindconfirm="keyconfirm" value="{{val}}"></input>
+    <input class='' placeholder='查地点、公交站、公共设施' bindinput='callinput' bindblur='' bindfocus='inputfocus' confirm-type='search' bindconfirm="keyconfirm" value="{{val}}" bindblur='blurarea'></input>
     <text bindtap="clear">清除</text>
     <scroll-view class="context" wx:if="{{showcontext}}" scroll-y="true">
       <view class="dismiss" wx:for="{{keywos}}" wx:key="this" wx:for-index="ind" wx:for-item="obj" bindtap='getData' data-index="{{ind}}" class="{{(index0===ind) ? 'on' : ''}}">

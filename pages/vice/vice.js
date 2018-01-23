@@ -112,6 +112,10 @@ Page({
     if (uid != undefined && uid != "" && uid > 0) {
       this.loadindex(uid);
     }
+    var val = wx.getStorageSync("val");
+    this.setData({
+      val: val
+    })
   },
   //加载热门搜索和历史记录
   loadindex: function (uid){
@@ -363,7 +367,7 @@ Page({
     var latitude = this.data.latitude;
     var longitude = this.data.longitude;
     var distinct = this.data.index1;
-    
+    wx.setStorageSync("val", keyword);
     wx.showLoading({
       title: '搜索中',
     })
@@ -414,6 +418,12 @@ Page({
       val:val,
       showcontext:false,
       keywos:[]
+    })
+  },
+  blurarea:function(){
+    this.setData({
+      showcontext: false,
+      keywos: []
     })
   }
 })
