@@ -21,8 +21,11 @@
   z-index: 1000;
   /* padding:20rpx 0rpx; */
   border:1px solid #ddd;
-  height:400rpx;
+  height:420rpx;
   box-shadow:0rpx 2rpx 5rpx 5rpx rgba(0,0,0,0.1);
+}
+.areainput .context .scrollview{
+  height:350rpx;
 }
 .areainput image{
   width:50rpx;
@@ -54,6 +57,9 @@
 }
 .history{
   height:300rpx;
+}
+.texcen{
+  text-align: center;
 }
 /* scroll-view{
   height: 300rpx;
@@ -141,4 +147,7 @@
 }
 .ritext{
   float:right;font-size:24rpx
+}
+.areainput .context .close{
+  color: #000;
 }
