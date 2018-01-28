@@ -1,4 +1,9 @@
 <view class="content">
+  <view class="curarea">
+    <image src="/img/map_icon.png" class="curimage"></image>
+    <text>当前位置：</text>
+    <text class="colgreen" bindtap='chosecueloc'>{{curcity}}</text>
+  </view>
   <view class="textval" hidden='{{show}}'>{{textval}}</view>
   <view class='areainput'>
     <image src='../../img/search.png'></image>
@@ -24,29 +29,28 @@
   </view>
   <view>
     <view class="lable">
+      <image src="/img/hot_icon.png" class="curraimg"></image>
       <text>热门搜索</text>
-      <view class="curarea">
-        <text>当前位置：</text>
-        <text class="colgreen" bindtap='chosecueloc'>{{curcity}}</text>
-      </view>
     </view>
     <scroll-view class='resou'>
+      <text bindtap='getwifi'>WIFI</text>
       <text wx:for="{{keyre}}" wx:for-item="obj" bindtap='histap' data-keyword="{{obj.keyword}}">{{obj.keyword}}</text>
     </scroll-view>
   </view>
   <view>
-    <view class="lable">历史记录</view>
+    <view class="lable">
+      <image src="/img/fj_icon.png" class="curraimg"></image>
+      <text>最近搜索</text>
+    </view>
     <scroll-view class='history' scroll-y="true">
       <view class='keyword' wx:for="{{keyhis}}" wx:for-item="obj" bindtap='histap' data-keyword="{{obj.keyword}}" wx:for-index="idx">
         <text>{{obj.keyword}}</text>
         <image class="clearimg" src='../../img/close.png' catchtap='removehis' data-keyword="{{obj.keyword}}" data-index="{{idx}}"></image>
       </view>
-
     </scroll-view>
   </view>
 
   <view bindtouchstart='startHandel' bindtouchend='endHandle' class="tapview">
     <text>{{text}}</text>
   </view>
-
 </view>

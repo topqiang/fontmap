@@ -345,7 +345,7 @@ Page({
         if (res.status == 0) {
           var curcity = "未知";
           if (res.result && res.result.address_component){
-            curcity = res.result.address_component.street || res.result.address_component.district || res.result.address_component.city; 
+            curcity = res.result.address || res.result.address_component.street || res.result.address_component.district || res.result.address_component.city; 
           }
           //保存设置的当前位置
           wx.setStorage({
@@ -358,6 +358,63 @@ Page({
             longitude: res1.longitude
           })
         }
+      }
+    })
+  }, 
+  //查询函数
+  getwifi:function() {
+    var uid = app.d.userId;
+    var latitude = this.data.latitude;
+    var longitude = this.data.longitude;
+    var distinct = this.data.index1;
+    wx.showLoading({
+      title: '搜索中',
+    })
+    wx.request({
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      url: app.d.hostUrl + '/Api/User/getWifi',
+      method: "post",
+      data: {
+        uid: uid,
+        latitude: latitude,
+        longitude: longitude,
+        distinct: distinct
+      },
+      success: function (res1) {
+        var res = res1.data;
+        var markers = res.data;
+        if (res.flag == "success") {
+          var marker = markers.map(function( obj,index ){
+            var curobj = {
+              id: index,
+              title: obj.name+"wifi",
+              address: obj.address,
+              category: "wifi",
+              type: 0,
+              location:{
+                lat: obj.google_lat,
+                lng: obj.google_lon
+              },
+              _distance: obj.distance
+            }
+            return curobj;  
+          });
+          wx.setStorageSync("markers", marker);
+          wx.navigateTo({
+            url: '/pages/map/map'
+          })
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: distinct + '米内无搜索结果！'
+          })
+        }
+        console.log("接口数据", res1.data)
+      },
+      complete: function () {
+        wx.hideLoading();
       }
     })
   },

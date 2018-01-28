@@ -2,6 +2,7 @@
   "pages":[
     "pages/vice/vice",
     "pages/map/map",
+    "pages/home/home",
     "pages/addnew/addnew"
   ],
   "window":{
