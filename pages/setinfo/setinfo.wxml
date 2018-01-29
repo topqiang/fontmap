@@ -22,9 +22,9 @@
       </view>
       <view class="weui-cell__bd">
         <view class="section">
-          <picker mode="date" value="{{birth || '2017-09-01'}}" bindchange="bindDateChange">
+          <picker mode="date" value="{{birth}}" bindchange="bindDateChange">
             <view class="picker">
-              {{birth || '2017-09-01'}}
+              {{birth }}
             </view>
           </picker>
         </view>

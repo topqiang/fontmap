@@ -25,7 +25,7 @@ Page({
       nickname: user.nickname,
       num: user.num,
       sex: user.sex,
-      birth: user.birth || '',
+      birth: user.birth || '2017-09-01',
       tel: user.tel
     })
   },
