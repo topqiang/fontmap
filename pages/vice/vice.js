@@ -1,11 +1,11 @@
 // pages/vice/vice.js
 var QQMapWX = require('./qqmap-wx-jssdk.min.js');
-var qqmapsdk,timeout;
+var qqmapsdk, timeout;
 const app = getApp();
-var page, time; 
+var page, time;
 const recorderManager = wx.getRecorderManager()
 recorderManager.onStart(() => {
-  
+
 })
 //录音停止函数
 recorderManager.onStop((res) => {
@@ -54,17 +54,17 @@ Page({
     // 实例化API核心类
     mapkey: "AJ3BZ-EPVCQ-NEY5U-G5H5V-2THSH-XFFI4",
     curcity: "天津",
-    text:"按住我",
-    showcontext:false,
-    press:false,
-    index0:-1,
-    textval:10,
-    show:true,
-    val:'',
-    dis:[
+    text: "按住我",
+    showcontext: false,
+    press: false,
+    index0: -1,
+    textval: 10,
+    show: true,
+    val: '',
+    dis: [
       {
-        txt:'1公里',
-        id:1000
+        txt: '1公里',
+        id: 1000
       },
       {
         txt: '2公里',
@@ -79,7 +79,7 @@ Page({
         id: 5000
       }
     ],
-    index1:1000
+    index1: 1000
   },
   /**
    * 生命周期函数--监听页面加载
@@ -99,16 +99,16 @@ Page({
     }
     //请求热门搜索和历史记录
     //回调延迟 ，有时为空
-    var intval = setInterval(function(){
-      var uid = app.d.userId;      
-      if (uid != undefined && uid !="" && uid>0){
+    var intval = setInterval(function () {
+      var uid = app.d.userId;
+      if (uid != undefined && uid != "" && uid > 0) {
         clearInterval(intval);
         that.loadindex(uid);
       }
-    },500);
+    }, 500);
   },
-  onShow:function(){
-    var uid = app.d.userId; 
+  onShow: function () {
+    var uid = app.d.userId;
     if (uid != undefined && uid != "" && uid > 0) {
       this.loadindex(uid);
     }
@@ -118,7 +118,7 @@ Page({
     })
   },
   //加载热门搜索和历史记录
-  loadindex: function (uid){
+  loadindex: function (uid) {
     var that = this;
     wx.request({
       header: {
@@ -142,53 +142,62 @@ Page({
     })
   },
   //历史记录--点击事件
-  histap:function(e){
+  histap: function (e) {
     var val = e.currentTarget.dataset.keyword;
     if (val && val != "") {
       this.search(val);
     }
   },
   //删除历史记录
-  removehis:function(e){
+  removehis: function (e) {
     var val = e.currentTarget.dataset.keyword;
     var index = e.currentTarget.dataset.index;
     var uid = app.d.userId;
-    if (val && val != "") {
-      wx.request({
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        url: app.d.hostUrl + '/Api/Index/removehis',
-        method: "post",
-        data: {
-          uid: uid,
-          keyword: val
-        },
-        success: function (res) {
-          if (res.statusCode == 200) {
-            var data = res.data;
-            wx.showToast({
-              title: data.message,
-            })
-            var keyhis = this.data.keyhis;
-            keyhis.splice(index,1);
-            this.setData({
-              keyhis: keyhis
-            })
-            console.log(res.data);
-          }
-        }.bind(this)
-      })
-    }
+    wx.showModal({
+      title: '提醒',
+      content: '确定要删除该项历史记录吗？',
+      success: function (res) {
+        if (res.confirm && val && val != "") {
+          console.log('用户点击确定');
+          wx.request({
+            header: {
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            url: app.d.hostUrl + '/Api/Index/removehis',
+            method: "post",
+            data: {
+              uid: uid,
+              keyword: val
+            },
+            success: function (res) {
+              if (res.statusCode == 200) {
+                var data = res.data;
+                wx.showToast({
+                  title: data.message,
+                })
+                var keyhis = this.data.keyhis;
+                console.log(index,"index");
+                keyhis.splice(index, 1);
+                this.setData({
+                  keyhis: keyhis
+                })
+                console.log(res.data);
+              }
+            }.bind(this)
+          })
+        }
+      }.bind(this)
+    })
+
   },
-//搜索框数据双向绑定
-  inputblur: function(){
+  //搜索框数据双向绑定
+  inputblur: function () {
     this.setData({
-      showcontext:false
+      showcontext: false
     })
   },
-  inputfocus:function(){
-    if (this.data.keywos && this.data.keywos.length>0){
+  inputfocus: function () {
+    if (this.data.keywos && this.data.keywos.length > 0) {
       this.setData({
         showcontext: true
       })
@@ -201,45 +210,45 @@ Page({
   callinput: function (e) {
     var val = e.detail.value;
     this.setData({
-      val:val
+      val: val
     })
     clearTimeout(timeout);
-    timeout = setTimeout(function(){
+    timeout = setTimeout(function () {
       this.getKeywords(val);
-    }.bind(this),500);
+    }.bind(this), 500);
   },
   /**
    * 关键词提醒
    * **/
-  getKeywords:function(val){
-     var that = this;
-     if (!val){
-       that.setData({
-         keywos: [],
-         showcontext: false
-       })
-       return;
-     }
+  getKeywords: function (val) {
+    var that = this;
+    if (!val) {
+      that.setData({
+        keywos: [],
+        showcontext: false
+      })
+      return;
+    }
     //调用微信自动补全方法
-     qqmapsdk.search({
-       keyword: val,
-       location: {
-         latitude: this.data.latitude,
-         longitude: this.data.longitude
-       },
-       address_format: 'short',
-       success: function (res) {
-         console.log("搜索结果", res);
-         //此处 关键词 提示 索引
-         if(res.status == 0 && res.count >0){
-           that.setData({
-             keywos:res.data,
-             showcontext:true
-           })
-         }
-       }
-     })
-   },
+    qqmapsdk.search({
+      keyword: val,
+      location: {
+        latitude: this.data.latitude,
+        longitude: this.data.longitude
+      },
+      address_format: 'short',
+      success: function (res) {
+        console.log("搜索结果", res);
+        //此处 关键词 提示 索引
+        if (res.status == 0 && res.count > 0) {
+          that.setData({
+            keywos: res.data,
+            showcontext: true
+          })
+        }
+      }
+    })
+  },
   /**
    * 用户点击右上角分享
    */
@@ -254,7 +263,7 @@ Page({
   startHandel: function () {
     console.log("开始")
     this.setData({
-      text:"录音中"
+      text: "录音中"
     })
     recorderManager.start({
       duration: 10000
@@ -265,7 +274,7 @@ Page({
     });
     time = setInterval(this.interval, 1000);
   },
-//松开按钮
+  //松开按钮
   endHandle: function () {
     console.log("结束")
     //结束录音  
@@ -281,14 +290,14 @@ Page({
   interval: function () {
     console.log(this.data.textval)
     var curval = this.data.textval - 1;
-    if(curval<=0){
-      clearInterval(time)      
+    if (curval <= 0) {
+      clearInterval(time)
       this.setData({
         show: true,
         textval: 0
       });
       recorderManager.stop()
-    }else{
+    } else {
       this.setData({
         show: false,
         textval: curval
@@ -296,22 +305,22 @@ Page({
     }
   },
   //键盘输入后确认--搜索关键词
-  keyconfirm:function(e){
+  keyconfirm: function (e) {
     var val = e.detail.value;
-    if(val && val != ""){
+    if (val && val != "") {
       this.search(val);
     }
   },
   //getData  
   //输入提示框点击事件--获取自动补全对应的数据
-  getData:function(e){
+  getData: function (e) {
     console.log(e);
     var index = e.currentTarget.dataset.index;
     this.setData({
-      index0:index
+      index0: index
     })
     var keywos = this.data.keywos;
-    if (keywos[index]){
+    if (keywos[index]) {
       var loc = keywos[index];
       wx.openLocation({
         name: loc['title'],
@@ -322,17 +331,17 @@ Page({
     }
   },
   // 修改当前定位位置
-  chosecueloc:function(){   
+  chosecueloc: function () {
     var that = this;
     wx.chooseLocation({
-      success: function(res) {
-        console.log("当前选择位置",res)
+      success: function (res) {
+        console.log("当前选择位置", res)
         that.setCur(res);
       }
     })
   },
   //设置中心位置
-  setCur: function (res1){
+  setCur: function (res1) {
     var that = this;
     qqmapsdk.reverseGeocoder({
       get_poi: 1,
@@ -344,8 +353,8 @@ Page({
         console.log(res)
         if (res.status == 0) {
           var curcity = "未知";
-          if (res.result && res.result.address_component){
-            curcity = res.result.address || res.result.address_component.street || res.result.address_component.district || res.result.address_component.city; 
+          if (res.result && res.result.address_component) {
+            curcity = res.result.address || res.result.address_component.street || res.result.address_component.district || res.result.address_component.city;
           }
           //保存设置的当前位置
           wx.setStorage({
@@ -360,9 +369,9 @@ Page({
         }
       }
     })
-  }, 
+  },
   //查询函数
-  getwifi:function() {
+  getwifi: function () {
     var uid = app.d.userId;
     var latitude = this.data.latitude;
     var longitude = this.data.longitude;
@@ -386,20 +395,20 @@ Page({
         var res = res1.data;
         var markers = res.data;
         if (res.flag == "success") {
-          var marker = markers.map(function( obj,index ){
+          var marker = markers.map(function (obj, index) {
             var curobj = {
               id: index,
-              title: obj.name+"wifi",
+              title: obj.name + "wifi",
               address: obj.address,
               category: "wifi",
               type: 0,
-              location:{
+              location: {
                 lat: obj.google_lat,
                 lng: obj.google_lon
               },
               _distance: obj.distance
             }
-            return curobj;  
+            return curobj;
           });
           wx.setStorageSync("markers", marker);
           wx.navigateTo({
@@ -419,7 +428,7 @@ Page({
     })
   },
   //查询函数
-  search:function(keyword){
+  search: function (keyword) {
     var uid = app.d.userId;
     var latitude = this.data.latitude;
     var longitude = this.data.longitude;
@@ -441,43 +450,43 @@ Page({
         longitude: longitude,
         distinct: distinct
       },
-      success:function( res1 ){
+      success: function (res1) {
         var res = res1.data;
-        if(res.status == 0 && res.count > 0){
+        if (res.status == 0 && res.count > 0) {
           wx.setStorageSync("markers", res.data);
           wx.navigateTo({
             url: '/pages/map/map'
           })
-        }else{
+        } else {
           wx.showModal({
             title: '提示',
-            content: distinct+'米内无搜索结果！'
+            content: distinct + '米内无搜索结果！'
           })
         }
-        console.log("接口数据", res1.data )
+        console.log("接口数据", res1.data)
       },
-      complete:function(){
+      complete: function () {
         wx.hideLoading();
       }
     })
   },
   //选择搜索范围
-  tog:function(e){
-    var idx=e.currentTarget.dataset.in;
+  tog: function (e) {
+    var idx = e.currentTarget.dataset.in;
     this.setData({
-      index1:idx
+      index1: idx
     })
   },
   //清除搜索框
-  clear:function(){
-    var val='';
+  clear: function () {
+    var val = '';
     this.setData({
-      val:val,
-      showcontext:false,
-      keywos:[]
+      val: val,
+      showcontext: false,
+      keywos: []
     })
   },
-  blurarea:function(){
+  blurarea: function () {
     this.setData({
       showcontext: false,
       keywos: []

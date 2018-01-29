@@ -158,8 +158,14 @@
   vertical-align: no-warp;
 }
 .ritext{
-  float:right;font-size:24rpx
+  float:right;font-size:24rpx;
 }
 .areainput .context .close{
   color: #000;
+}
+.argsnum{
+  width: 100rpx;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
 }

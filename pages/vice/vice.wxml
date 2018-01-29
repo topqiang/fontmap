@@ -29,12 +29,20 @@
   </view>
   <view>
     <view class="lable">
+      <text class="fr">搜索指数</text>
       <image src="/img/hot_icon.png" class="curraimg"></image>
       <text>热门搜索</text>
     </view>
-    <scroll-view class='resou'>
+    <!-- <scroll-view class='resou'>
       <text bindtap='getwifi'>WIFI</text>
       <text wx:for="{{keyre}}" wx:for-item="obj" bindtap='histap' data-keyword="{{obj.keyword}}">{{obj.keyword}}</text>
+    </scroll-view> -->
+
+    <scroll-view class='history' scroll-y="true">
+      <view class='keyword' wx:for="{{keyre}}" wx:for-item="obj" bindtap='histap' data-keyword="{{obj.keyword}}">
+        <text class="fr argsnum">{{obj.num}}</text>
+        <text>{{obj.keyword}}</text>
+      </view>
     </scroll-view>
   </view>
   <view>
@@ -42,12 +50,17 @@
       <image src="/img/fj_icon.png" class="curraimg"></image>
       <text>最近搜索</text>
     </view>
-    <scroll-view class='history' scroll-y="true">
+    <scroll-view class='resou'>
+      <text bindtap='getwifi'>WIFI</text>
+      <text wx:for="{{keyhis}}" wx:for-item="obj" catchtap='histap' catchlongpress='removehis' data-keyword="{{obj.keyword}}" wx:for-index="idx" data-index="{{idx}}">{{obj.keyword}}</text>
+    </scroll-view>
+
+    <!-- <scroll-view class='history' scroll-y="true">
       <view class='keyword' wx:for="{{keyhis}}" wx:for-item="obj" bindtap='histap' data-keyword="{{obj.keyword}}" wx:for-index="idx">
         <text>{{obj.keyword}}</text>
         <image class="clearimg" src='../../img/close.png' catchtap='removehis' data-keyword="{{obj.keyword}}" data-index="{{idx}}"></image>
       </view>
-    </scroll-view>
+    </scroll-view> -->
   </view>
 
   <view bindtouchstart='startHandel' bindtouchend='endHandle' class="tapview">

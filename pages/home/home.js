@@ -1,18 +1,28 @@
 // pages/home/home.js
+var app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var user = app.d.userinfo;  
+    console.log(app.d,user);
+    this.setData({
+      uid: user.ID,
+      headurl: user.headurl,
+      name: user.name,
+      nickname: user.nickname,
+      num: user.num,
+      sex: user.sex,
+      tel: user.tel
+    })
   },
 
   /**
